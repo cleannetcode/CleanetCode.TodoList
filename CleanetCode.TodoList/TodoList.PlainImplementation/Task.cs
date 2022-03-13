@@ -1,0 +1,1 @@
+record Task(Guid Id, string Name, string Description, Guid UserId, bool IsDone = false);

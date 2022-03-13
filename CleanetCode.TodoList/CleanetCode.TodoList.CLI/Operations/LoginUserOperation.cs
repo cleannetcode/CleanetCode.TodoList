@@ -3,20 +3,30 @@ using CleanetCode.TodoList.CLI.Storages;
 
 namespace CleanetCode.TodoList.CLI.Operations
 {
-	public class LoginUserOperation : IOperation
-	{
-		public string Name => "Залогиниться в системе";
+    public class LoginUserOperation : IOperation
+    {
+        public string Name => "Залогиниться в системе";
 
-		public void Execute()
-		{
-			Console.Write("Введите ваш email:");
-			string? email = Console.ReadLine();
-			User? user = UserStorage.Get(email);
+        public bool Execute()
+        {
+            Console.Write("Введите ваш email:");
+            string? userInput = Console.ReadLine();
+            var (email, error) = Email.Create(userInput);
+            if (email == null)
+            {
+                Console.WriteLine(error);
+                return false;
+            }
 
-			if (user == null)
-			{
-				UserSession.CurrentUser = user;
-			}
-		}
-	}
+            User? user = UserStorage.Get(email);
+            if (user == null)
+            {
+                Console.WriteLine("Пользователь не найден");
+                return false;
+            }
+
+            UserSession.CurrentUser = user;
+            return true;
+        }
+    }
 }

@@ -1,0 +1,1 @@
+record User(Guid Id, string Email);
